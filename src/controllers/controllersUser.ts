@@ -41,8 +41,8 @@ class Controllersuser {
     async reguser (req: Request, res: Response): Promise<any>{
         try {
             const pool = await getcon();
-            let { Username, Password, Name, Lastname } = req.body;    
-            if(!Username || !Password || !Name || !Lastname) {
+            let { Username, Password, Telefono } = req.body;    
+            if(!Username || !Password || !Telefono) {
                 return res.status(400).json({ msg : 'No se han llenado los valores correctamente'});
             } else {
                 const result = await getdatosuser(pool, Username);
@@ -55,8 +55,7 @@ class Controllersuser {
                     await pool.request()
                     .input('nick', sql.VarChar, Username)
                     .input('pw', sql.VarChar, pwh)
-                    .input('nombre', sql.VarChar, Name)
-                    .input('apellido', sql.VarChar, Lastname)
+                    .input('tlf', sql.VarChar, Telefono)
                     .query(String(config.q1));
                     pool.close();
                     return res.status(200).send({msg: 'Se ha registrado satisfactoriamente', token: creartoken(Username) });
@@ -101,47 +100,36 @@ class Controllersuser {
 
     async moduser(req: Request, res: Response): Promise<any> {
         try {
-            let { Username, Name, Lastname, oldPassword, newPassword} = req.body;
+            let { Username, Telefono, oldPassword, newPassword} = req.body;
             const pool = await getcon();
             const result = await getdatosuser(pool, String(req.user));
-            let { name_usuario, lastname_usuario, nick_usuario} = result.recordset[0]
+            let {tlf_usuario, nick_usuario} = result.recordset[0]
             if ((Username == nick_usuario || Username =='') &&
-                (Name == name_usuario || Name == '') &&
-                (Lastname == lastname_usuario || Lastname == '') &&
+                (Telefono == tlf_usuario || Telefono == '') &&
                 ((oldPassword == null || oldPassword =='') ||
                 (newPassword == null || newPassword == ''))) {
                 pool.close();
-                return res.status(400).send({msg: 'No se ha cambiado ningun valor...'}) 
-            } 
-            if(Name != null && Name != name_usuario && Name != ''){
-                await pool.request()
-                .input('nombre', sql.VarChar, Name)
-                .input('nickname', req.user)
-                .query(String(config.q3_1));
+                return res.status(400).send({msg: 'No se ha cambiado ningun valor...'}) ;
             }
-            if(Lastname != null && Lastname != lastname_usuario && Lastname != ''){
+            if(Telefono != null && Telefono != tlf_usuario && Telefono!= ''){
                 await pool.request()
-                .input('apellido', sql.VarChar, Lastname)
+                .input('tlf', sql.VarChar, Telefono)
                 .input('nickname', req.user)
                 .query(String(config.q3_2));
             }
-            let f = 'no se ha intentado cambiar el nick de usuario'
-            let token = ''
+            let f = 'no se ha intentado cambiar el nick de usuario';
+            let token = '';
             if(Username != null && Username != nick_usuario && Username != ''){ 
                 const r1 = await getdatosuser(pool, String(Username));
                 if (r1.recordset[0]) {
-                    f = 'el usuario ya existe'                  
+                    f = 'el usuario ya existe';                  
                 } else {
                     await pool.request()
                     .input('nick', sql.VarChar, Username)
                     .input('nickname', req.user)
                     .query(String(config.q3_3));
-                    await pool.request()
-                    .input('nick', sql.VarChar, Username)
-                    .input('nickname', req.user)
-                    .query(String(config.q3_4));
-                    token = creartoken(Username)
-                    f = 'el nick de usuario ha cambiado' 
+                    token = creartoken(Username);
+                    f = 'el nick de usuario ha cambiado'; 
                 }    
             }
             let cp = 'no se ha intentado cambiar la password'
@@ -149,8 +137,8 @@ class Controllersuser {
                 oldPassword != '' &&
                 newPassword != null &&
                 newPassword != ''){
-                let r = await changePassword(oldPassword, newPassword, req, pool)
-                cp = String(r)
+                let r = await changePassword(oldPassword, newPassword, req, pool);
+                cp = String(r);
             }
             return res.status(200).send({msg: 'Los datos de usuario han sido actualizados, '+f+', '+cp, newToken: token})  
         } catch (error) {
