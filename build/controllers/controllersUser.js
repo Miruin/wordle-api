@@ -133,18 +133,20 @@ class Controllersuser {
                     pool.close();
                     return res.status(400).send({ msg: 'No se ha cambiado ningun valor...' });
                 }
+                let fTlf = null;
                 if (Telefono != null && Telefono != tlf_usuario && Telefono != '') {
                     yield pool.request()
                         .input('tlf', mssql_1.default.VarChar, Telefono)
                         .input('nickname', req.user)
                         .query(String(config_1.default.q3_2));
+                    fTlf = 1;
                 }
-                let f = 'no se ha intentado cambiar el nick de usuario';
+                let fUser = null;
                 let token = '';
                 if (Username != null && Username != nick_usuario && Username != '') {
                     const r1 = yield (0, connection_1.getdatosuser)(pool, String(Username));
                     if (r1.recordset[0]) {
-                        f = 'el usuario ya existe';
+                        fUser = 0;
                     }
                     else {
                         yield pool.request()
@@ -152,18 +154,23 @@ class Controllersuser {
                             .input('nickname', req.user)
                             .query(String(config_1.default.q3_3));
                         token = creartoken(Username);
-                        f = 'el nick de usuario ha cambiado';
+                        fUser = 1;
                     }
                 }
-                let cp = 'no se ha intentado cambiar la password';
+                let fCp = null;
                 if (oldPassword != null &&
                     oldPassword != '' &&
                     newPassword != null &&
                     newPassword != '') {
                     let r = yield changePassword(oldPassword, newPassword, req, pool);
-                    cp = String(r);
+                    fCp = 1;
                 }
-                return res.status(200).send({ msg: 'Los datos de usuario han sido actualizados, ' + f + ', ' + cp, newToken: token });
+                return res.status(200).send({
+                    estadoTlf: fTlf,
+                    estadoUsername: fUser,
+                    estadoPassword: fCp,
+                    newToken: token
+                });
             }
             catch (error) {
                 console.error(error);
