@@ -19,6 +19,7 @@ class Rutasuser{
     this.routes();
   }
   routes() { 
+    this.router.post('/verificacion', controllersuser.verify)
     this.router.post('/registro', controllersuser.reguser);
     this.router.post('/log', controllersuser.login);
     this.router.get('/log', optionalAuth, controllersuser.logout);

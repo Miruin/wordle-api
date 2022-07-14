@@ -15,6 +15,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const mssql_1 = __importDefault(require("mssql"));
 const bcrypt_1 = __importDefault(require("bcrypt"));
 const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
+const twilio_1 = require("twilio");
 const config_1 = __importDefault(require("../config/config"));
 const connection_1 = require("../database/connection");
 function creartoken(id) {
@@ -207,6 +208,30 @@ class Controllersuser {
                     pool.close();
                     return res.status(500).send({ msg: 'No se encuentra este usuario en la DB' });
                 }
+            }
+            catch (error) {
+                console.error(error);
+                return res.status(500).send({ msg: 'Error en el servidor' });
+            }
+        });
+    }
+    verify(req, res) {
+        return __awaiter(this, void 0, void 0, function* () {
+            try {
+                let { Telefono } = req.body;
+                let code = Math.floor(Math.random() * (999999 - 111111 + 1)) + 111111;
+                if (config_1.default.accountSid && config_1.default.authToken) {
+                    const client = new twilio_1.Twilio(config_1.default.accountSid, config_1.default.authToken);
+                    client.messages.create({
+                        from: config_1.default.myNumber,
+                        to: Telefono,
+                        body: 'Tu coidgo de verificacion es ' + code
+                    })
+                        .then((msg) => console.log(msg.sid));
+                }
+                let rondas = 10;
+                let codeh = yield bcrypt_1.default.hash(String(code), rondas);
+                return res.status(200).send({ msg: 'porfavor ingresar codigo de verificacion', codigo: codeh });
             }
             catch (error) {
                 console.error(error);

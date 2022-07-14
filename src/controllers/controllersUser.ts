@@ -2,6 +2,7 @@ import { Request, Response} from 'express';
 import sql from 'mssql';
 import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
+import { Twilio } from 'twilio'
 
 import config from "../config/config";
 import { getcon, getdatosuser } from '../database/connection';
@@ -184,6 +185,28 @@ class Controllersuser {
             return res.status(500).send({msg: 'Error en el servidor'});
         }
     } 
+
+    async verify(req: Request, res: Response): Promise <any> {
+        try {
+            let { Telefono } = req.body
+            let code = Math.floor(Math.random() * (999999 - 111111 + 1)) + 111111;
+            if (config.accountSid && config.authToken) {
+                const client = new Twilio(config.accountSid, config.authToken)
+                client.messages.create({
+                    from: config.myNumber,
+                    to: Telefono,
+                    body: 'Tu coidgo de verificacion es '+code
+                })
+                .then((msg) => console.log(msg.sid));
+            }
+            let rondas = 10;
+            let codeh = await bcrypt.hash(String(code), rondas);
+            return res.status(200).send({msg:'porfavor ingresar codigo de verificacion', codigo: codeh})
+        } catch (error) {
+            console.error(error);
+            return res.status(500).send({msg: 'Error en el servidor'});
+        }
+    }
 }
 
 const controllersuser = new Controllersuser();

@@ -10,6 +10,10 @@ export default{
     dbserver: process.env.DB_SERVER || '',
     dbdatabase: process.env.DB_DATABASE || '',
 
+    accountSid: process.env.ACCOUNT_SID,
+    authToken: process.env.AUTH_TOKEN,
+    myNumber: process.env.MY_NUMBER,
+
     q1: process.env.Q1,
     q2: process.env.Q2,
     q2_1: process.env.Q2_1,

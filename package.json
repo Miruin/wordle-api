@@ -21,7 +21,8 @@
     "passport": "^0.6.0",
     "passport-jwt": "^4.0.0",
     "tarn": "^3.0.2",
-    "tedious": "^14.7.0"
+    "tedious": "^14.7.0",
+    "twilio": "^3.79.0"
   },
   "devDependencies": {
     "@types/bcrypt": "^5.0.0",
