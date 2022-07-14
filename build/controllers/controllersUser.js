@@ -239,6 +239,30 @@ class Controllersuser {
             }
         });
     }
+    deleteuser(req, res) {
+        return __awaiter(this, void 0, void 0, function* () {
+            try {
+                if (req.user) {
+                    let pool = yield (0, connection_1.getcon)();
+                    let result = yield (0, connection_1.getdatosuser)(pool, String(req.user));
+                    if (result.recordset[0]) {
+                        yield pool.request()
+                            .input('user', mssql_1.default.VarChar, req.user)
+                            .query(String(config_1.default.q1_1));
+                    }
+                    else {
+                        return res.status(400).send({ msg: 'no se encuentra este usuario' });
+                    }
+                    return res.status(200).send({ msg: 'el usuario ha sido eliminado' });
+                }
+                else {
+                    return res.status(400).send({ msg: 'no tienes permitido borrar el usuario' });
+                }
+            }
+            catch (error) {
+            }
+        });
+    }
 }
 const controllersuser = new Controllersuser();
 exports.default = controllersuser;

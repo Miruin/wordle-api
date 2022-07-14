@@ -26,6 +26,7 @@ class Rutasuser {
         this.router.get('/log', optionalAuth, controllersUser_1.default.logout);
         this.router.get('/perfil/:username', optionalAuth, controllersUser_1.default.getuser);
         this.router.put('/perfil', optionalAuth, controllersUser_1.default.moduser);
+        this.router.delete('/perfil', optionalAuth, controllersUser_1.default.deleteuser);
     }
 }
 const rutauser = new Rutasuser();

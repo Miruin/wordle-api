@@ -12,6 +12,7 @@ exports.default = {
     authToken: process.env.AUTH_TOKEN,
     myNumber: process.env.MY_NUMBER,
     q1: process.env.Q1,
+    q1_1: process.env.Q1_1,
     q2: process.env.Q2,
     q2_1: process.env.Q2_1,
     q3: process.env.Q3,

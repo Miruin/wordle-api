@@ -25,6 +25,7 @@ class Rutasuser{
     this.router.get('/log', optionalAuth, controllersuser.logout);
     this.router.get('/perfil/:username', optionalAuth, controllersuser.getuser);
     this.router.put('/perfil', optionalAuth, controllersuser.moduser);
+    this.router.delete('/perfil', optionalAuth, controllersuser.deleteuser);
   }
 }
 

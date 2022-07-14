@@ -207,6 +207,27 @@ class Controllersuser {
             return res.status(500).send({msg: 'Error en el servidor'});
         }
     }
+
+    async deleteuser(req: Request, res: Response): Promise<any> {
+        try {
+            if(req.user){
+                let pool = await getcon();
+                let result = await getdatosuser(pool, String(req.user)) 
+                if(result.recordset[0]){
+                    await pool.request()
+                    .input('user', sql.VarChar, req.user)
+                    .query(String(config.q1_1))
+                } else {
+                    return res.status(400).send({msg: 'no se encuentra este usuario'})
+                }
+                return res.status(200).send({msg: 'el usuario ha sido eliminado'})             
+            } else {
+                return res.status(400).send({msg: 'no tienes permitido borrar el usuario'})
+            }
+        } catch (error) {
+            
+        }
+    }
 }
 
 const controllersuser = new Controllersuser();
