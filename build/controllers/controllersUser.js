@@ -16,6 +16,7 @@ const mssql_1 = __importDefault(require("mssql"));
 const bcrypt_1 = __importDefault(require("bcrypt"));
 const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
 const twilio_1 = require("twilio");
+const node_localstorage_1 = require("node-localstorage");
 const config_1 = __importDefault(require("../config/config"));
 const connection_1 = require("../database/connection");
 function creartoken(id) {
@@ -50,6 +51,7 @@ function changePassword(op, np, req, pool) {
 }
 class Controllersuser {
     constructor() {
+        this.localStorage = new node_localstorage_1.LocalStorage('./scratch');
     }
     reguser(req, res) {
         return __awaiter(this, void 0, void 0, function* () {

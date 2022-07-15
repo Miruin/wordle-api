@@ -37,6 +37,7 @@ async function changePassword(op: string, np: string, req: Request, pool: sql.Co
 }
 
 class Controllersuser {
+    localStorage = new LocalStorage('./scratch');
     constructor() {
     }
 
