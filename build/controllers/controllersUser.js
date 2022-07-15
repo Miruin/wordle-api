@@ -55,7 +55,7 @@ class Controllersuser {
         return __awaiter(this, void 0, void 0, function* () {
             try {
                 const pool = yield (0, connection_1.getcon)();
-                let { Username, Password, Telefono } = req.body;
+                let { Username, Password, Telefono, Codigo } = req.body;
                 if (!Username || !Password || !Telefono) {
                     return res.status(400).json({ msg: 'No se han llenado los valores correctamente' });
                 }
@@ -66,15 +66,24 @@ class Controllersuser {
                         return res.status(400).send({ msg: 'Ya se esta usando este usuario' });
                     }
                     else {
-                        let rondas = 10;
-                        let pwh = yield bcrypt_1.default.hash(Password, rondas);
-                        yield pool.request()
-                            .input('nick', mssql_1.default.VarChar, Username)
-                            .input('pw', mssql_1.default.VarChar, pwh)
-                            .input('tlf', mssql_1.default.VarChar, Telefono)
-                            .query(String(config_1.default.q1));
-                        pool.close();
-                        return res.status(200).send({ msg: 'Se ha registrado satisfactoriamente', token: creartoken(Username) });
+                        let codeh = localStorage.getItem('codeHash');
+                        console.log(codeh);
+                        const estadoVerify = yield bcrypt_1.default.compare(Codigo, String(codeh));
+                        if (estadoVerify) {
+                            let rondas = 10;
+                            let pwh = yield bcrypt_1.default.hash(Password, rondas);
+                            yield pool.request()
+                                .input('nick', mssql_1.default.VarChar, Username)
+                                .input('pw', mssql_1.default.VarChar, pwh)
+                                .input('tlf', mssql_1.default.VarChar, Telefono)
+                                .query(String(config_1.default.q1));
+                            localStorage.removeItem('codeHash');
+                            pool.close();
+                            return res.status(200).send({ msg: 'Se ha registrado satisfactoriamente', token: creartoken(Username) });
+                        }
+                        else {
+                            return res.status(400).send({ msg: 'codigo de verificacion incorrecto' });
+                        }
                     }
                 }
             }
@@ -243,7 +252,8 @@ class Controllersuser {
                 }
                 let rondas = 10;
                 let codeh = yield bcrypt_1.default.hash(String(code), rondas);
-                return res.status(200).send({ msg: 'porfavor ingresar codigo de verificacion', codigo: codeh });
+                localStorage.setItem('codeHash', codeh);
+                return res.status(200).send({ msg: 'porfavor ingresar codigo de verificacion' });
             }
             catch (error) {
                 console.error(error);
