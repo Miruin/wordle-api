@@ -226,6 +226,16 @@ class Controllersuser {
         return __awaiter(this, void 0, void 0, function* () {
             try {
                 let { Telefono } = req.body;
+                let expresion = /^\+\d{1,3}\d{2,3}\d{6,7}$/;
+                let r = expresion.test(Telefono);
+                console.log(r);
+                const pool = yield (0, connection_1.getcon)();
+                const existTlf = yield pool.request()
+                    .input('tlf', mssql_1.default.VarChar, Telefono)
+                    .query(String(config_1.default.q2_2));
+                if (!r || existTlf.recordset.length == 1) {
+                    return res.status(400).send({ msg: 'ERROR no se puede registrar con un telefono que ya ha sido registrado o los datos no son validos' });
+                }
                 let code = Math.floor(Math.random() * (999999 - 111111 + 1)) + 111111;
                 if (config_1.default.accountSid && config_1.default.authToken) {
                     const client = new twilio_1.Twilio(config_1.default.accountSid, config_1.default.authToken);
