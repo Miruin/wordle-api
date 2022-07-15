@@ -196,7 +196,7 @@ class Controllersuser {
     async verify(req: Request, res: Response): Promise <any> {
         try {
             let { Telefono } = req.body
-            let expresion = /^\+\d{1,3}\d{2,3}\d{6,7}$/
+            let expresion = /^\+\d{1,3}\d{2,4}\d{6,7}$/
             let r = expresion.test(Telefono)
             const pool = await getcon()
             const existTlf = await pool.request()

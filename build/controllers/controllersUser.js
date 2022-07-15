@@ -226,7 +226,7 @@ class Controllersuser {
         return __awaiter(this, void 0, void 0, function* () {
             try {
                 let { Telefono } = req.body;
-                let expresion = /^\+\d{1,3}\d{2,3}\d{6,7}$/;
+                let expresion = /^\+\d{1,3}\d{2,4}\d{6,7}$/;
                 let r = expresion.test(Telefono);
                 const pool = yield (0, connection_1.getcon)();
                 const existTlf = yield pool.request()
