@@ -228,7 +228,6 @@ class Controllersuser {
                 let { Telefono } = req.body;
                 let expresion = /^\+\d{1,3}\d{2,3}\d{6,7}$/;
                 let r = expresion.test(Telefono);
-                console.log(r);
                 const pool = yield (0, connection_1.getcon)();
                 const existTlf = yield pool.request()
                     .input('tlf', mssql_1.default.VarChar, Telefono)
@@ -238,6 +237,7 @@ class Controllersuser {
                 }
                 let code = Math.floor(Math.random() * (999999 - 111111 + 1)) + 111111;
                 if (config_1.default.accountSid && config_1.default.authToken) {
+                    console.log('hola? ' + code + ' telefono: ' + Telefono);
                     const client = new twilio_1.Twilio(config_1.default.accountSid, config_1.default.authToken);
                     client.messages.create({
                         from: config_1.default.myNumber,
