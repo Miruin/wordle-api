@@ -3,7 +3,6 @@ import sql from 'mssql';
 import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
 import { Twilio } from 'twilio'
-import {LocalStorage} from 'node-localstorage'
 
 import config from "../config/config";
 import { getcon, getdatosuser } from '../database/connection';
@@ -37,14 +36,13 @@ async function changePassword(op: string, np: string, req: Request, pool: sql.Co
 }
 
 class Controllersuser {
-    localStorage = new LocalStorage('./scratch');
     constructor() {
     }
 
     async reguser (req: Request, res: Response): Promise<any>{
         try {
             const pool = await getcon();
-            let { Username, Password, Telefono, Codigo} = req.body;    
+            let { Username, Password, Telefono, Codigo, CodigoHash} = req.body;    
             if(!Username || !Password || !Telefono) {
                 return res.status(400).json({ msg : 'No se han llenado los valores correctamente'});
             } else {
@@ -53,9 +51,7 @@ class Controllersuser {
                     pool.close();
                     return res.status(400).send({msg: 'Ya se esta usando este usuario'});
                 } else {
-                    let codeh = localStorage.getItem('codeHash')
-                    console.log(codeh);
-                    const estadoVerify = await bcrypt.compare(Codigo, String(codeh));
+                    const estadoVerify = await bcrypt.compare(Codigo, CodigoHash);
                     if (estadoVerify) {
                         let rondas = 10;
                         let pwh = await bcrypt.hash(Password, rondas);
@@ -63,8 +59,7 @@ class Controllersuser {
                         .input('nick', sql.VarChar, Username)
                         .input('pw', sql.VarChar, pwh)
                         .input('tlf', sql.VarChar, Telefono)
-                        .query(String(config.q1));
-                        localStorage.removeItem('codeHash');                        
+                        .query(String(config.q1));                       
                         pool.close();
                         return res.status(200).send({msg: 'Se ha registrado satisfactoriamente', token: creartoken(Username) });
                     } else {
@@ -223,8 +218,8 @@ class Controllersuser {
             }
             let rondas = 10;
             let codeh = await bcrypt.hash(String(code), rondas);
-            localStorage.setItem('codeHash', codeh);
-            return res.status(200).send({msg:'porfavor ingresar codigo de verificacion'})
+            return res.status(200).send({msg:'porfavor ingresar codigo de verificacion',
+            codeHash: codeh})
         } catch (error) {
             console.error(error);
             return res.status(500).send({msg: 'Error en el servidor'});
