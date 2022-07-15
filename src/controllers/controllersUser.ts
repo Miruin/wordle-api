@@ -196,13 +196,13 @@ class Controllersuser {
     async verify(req: Request, res: Response): Promise <any> {
         try {
             let { Telefono } = req.body
-            let expresion = /^\+\d{1,3}\d{2,4}\d{6,7}$/
-            let r = expresion.test(Telefono)
+            //let expresion = /^\+\d{1,3}\d{2,4}\d{6,7}$/
+            //let r = expresion.test(Telefono)
             const pool = await getcon()
             const existTlf = await pool.request()
             .input('tlf', sql.VarChar, Telefono)
             .query(String(config.q2_2))
-            if (!r || existTlf.recordset.length != 0){
+            if ( existTlf.recordset.length != 0){
                 return res.status(400).send({msg: 'ERROR no se puede registrar con un telefono que ya ha sido registrado o los datos no son validos'})
             }
             let code = Math.floor(Math.random() * (999999 - 111111 + 1)) + 111111;
