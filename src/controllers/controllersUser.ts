@@ -203,7 +203,6 @@ class Controllersuser {
             }
             let code = Math.floor(Math.random() * (999999 - 111111 + 1)) + 111111;
             if (config.accountSid && config.authToken) {
-                console.log('hola? '+code+' telefono: '+Telefono)
                 const client = new Twilio(config.accountSid, config.authToken)
                 client.messages.create({
                     from: config.myNumber,
