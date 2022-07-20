@@ -9,6 +9,7 @@ const passport_1 = __importDefault(require("passport"));
 const auth_1 = __importDefault(require("./middleware/auth"));
 const config_1 = __importDefault(require("./config/config"));
 const routeuser_1 = __importDefault(require("./routes/routeuser"));
+const routeroom_1 = __importDefault(require("./routes/routeroom"));
 class server {
     constructor() {
         this.app = (0, express_1.default)();
@@ -25,6 +26,7 @@ class server {
     }
     routes() {
         this.app.use(routeuser_1.default);
+        this.app.use(routeroom_1.default);
     }
     start() {
         this.app.listen(this.app.get('port'), () => {

@@ -5,6 +5,7 @@ import passport from 'passport'
 import middleware from './middleware/auth'
 import config from './config/config';
 import rutauser from './routes/routeuser';
+import rutaroom from './routes/routeroom'
 
 
 class server {
@@ -24,6 +25,7 @@ class server {
     }
     routes() {
         this.app.use(rutauser);
+        this.app.use(rutaroom);
     }
     start() {
         this.app.listen(this.app.get('port'), () => {
