@@ -105,7 +105,7 @@ class Controllersroom {
     modifyRoom(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
             try {
-                let { Code, Trys, Timers, Words, Rounds } = req.body;
+                let { Code, Try, Timer, Words, Rounds } = req.body;
                 let pool = yield (0, connection_1.getcon)();
                 let usuario = yield (0, connection_1.getdatosuser)(pool, String(req.user));
                 let room = yield pool.request()
@@ -119,8 +119,8 @@ class Controllersroom {
                         .input('idroom', mssql_1.default.Int, room.recordset[0].id_room)
                         .input('ronda', mssql_1.default.Int, i)
                         .input('palabra', mssql_1.default.Int, Words)
-                        .input('intentos', mssql_1.default.Int, Trys)
-                        .input('tiempo', mssql_1.default.Int, Timers)
+                        .input('intentos', mssql_1.default.Int, Try)
+                        .input('tiempo', mssql_1.default.Int, Timer)
                         .query(String(config_1.default.q10));
                 }
                 pool.close();

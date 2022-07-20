@@ -90,7 +90,7 @@ class Controllersroom {
     }
     async modifyRoom(req: Request, res: Response): Promise<any>{
         try {
-            let {Code, Trys, Timers, Words, Rounds} = req.body
+            let {Code, Try, Timer, Words, Rounds} = req.body
             let pool = await getcon();
             let usuario = await getdatosuser(pool, String(req.user))
             let room = await pool.request()
@@ -104,8 +104,8 @@ class Controllersroom {
                 .input('idroom', sql.Int, room.recordset[0].id_room)
                 .input('ronda', sql.Int, i)
                 .input('palabra', sql.Int, Words)
-                .input('intentos', sql.Int, Trys)
-                .input('tiempo', sql.Int, Timers)
+                .input('intentos', sql.Int, Try)
+                .input('tiempo', sql.Int, Timer)
                 .query(String(config.q10))
             }
             pool.close()
