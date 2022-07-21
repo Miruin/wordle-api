@@ -22,6 +22,7 @@ class Controllersroom {
         return __awaiter(this, void 0, void 0, function* () {
             try {
                 let { Timer, Try, Words, Rounds } = req.body;
+                console.log(req.body);
                 let codigo;
                 let pool = yield (0, connection_1.getcon)();
                 let usuario = yield (0, connection_1.getdatosuser)(pool, String(req.user));
