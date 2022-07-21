@@ -11,7 +11,6 @@ class Controllersroom {
     async crearRoom (req: Request, res: Response): Promise<any> {
         try {
             let {Timer, Try, Words, Rounds} = req.body;
-            console.log(req.body)
             let codigo                   
             let pool = await getcon()
             let usuario = await getdatosuser(pool, String(req.user))
