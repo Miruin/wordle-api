@@ -25,7 +25,9 @@ class Controllersroom {
             .input('codigo', sql.Int, codigo)
             .input('iduser', sql.Int, usuario.recordset[0].id_usuario)
             .query(String(config.q5))
+            console.log('salvando reglas por ronda')
             for (let i = 1; i > Rounds; i++) {
+                console.log('ronda numero '+i)
                 await pool.request()
                 .input('idroom', sql.Int, room.recordset[0].id_room)
                 .input('ronda', sql.Int, i)

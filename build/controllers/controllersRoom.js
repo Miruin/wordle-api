@@ -36,7 +36,9 @@ class Controllersroom {
                     .input('codigo', mssql_1.default.Int, codigo)
                     .input('iduser', mssql_1.default.Int, usuario.recordset[0].id_usuario)
                     .query(String(config_1.default.q5));
+                console.log('salvando reglas por ronda');
                 for (let i = 1; i > Rounds; i++) {
+                    console.log('ronda numero ' + i);
                     yield pool.request()
                         .input('idroom', mssql_1.default.Int, room.recordset[0].id_room)
                         .input('ronda', mssql_1.default.Int, i)
