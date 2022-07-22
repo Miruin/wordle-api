@@ -30,6 +30,7 @@ export default{
     q9: process.env.Q9,
     q9_1: process.env.Q9_1,
     q10: process.env.Q10,
+    q10_1: process.env.Q10_1,
     
 
     secrettoken: process.env.SECRET_TOKEN
