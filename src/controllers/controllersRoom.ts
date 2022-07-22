@@ -99,7 +99,7 @@ class Controllersroom {
             .query(String(config.q9))
             if (room.recordset.length == 0) 
                 return res.status(400).send({msg: 'La sala no existe o no es el autor de la sala'});
-            for (let i = 1; i == Rounds; i++) {
+            for (let i = 1; i <= Rounds; i++) {
                 await pool.request()
                 .input('idroom', sql.Int, room.recordset[0].id_room)
                 .input('ronda', sql.Int, i)
