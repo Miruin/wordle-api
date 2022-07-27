@@ -135,6 +135,34 @@ class Controllersroom {
             }
         });
     }
+    obtenerRoom(req, res) {
+        return __awaiter(this, void 0, void 0, function* () {
+            try {
+                let codigo = req.params.codigo;
+                let pool = yield (0, connection_1.getcon)();
+                let room = yield pool.request()
+                    .input('codigo', mssql_1.default.Int, codigo)
+                    .query(String(config_1.default.q11));
+                if (room.recordset.length != 0) {
+                    let rounds, trys, wordLength, timer;
+                    rounds = room.recordset.length;
+                    trys = room.recordset[0].intentos;
+                    wordLength = room.recordset[0].palabra;
+                    timer = room.recordset[0].tiempo_ronda;
+                    pool.close();
+                    return res.status(200).send({ Rounds: rounds, Trys: trys, WordLength: wordLength, Timer: timer });
+                }
+                else {
+                    pool.close();
+                    return res.status(400).send({ msg: 'error no se encuentras las reglas del room' });
+                }
+            }
+            catch (error) {
+                console.error(error);
+                return res.status(500).send({ msg: 'error en el servidor al obtener room' });
+            }
+        });
+    }
 }
 const controllersroom = new Controllersroom();
 exports.default = controllersroom;

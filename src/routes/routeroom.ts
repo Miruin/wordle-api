@@ -21,6 +21,7 @@ class Rutasroom{
   routes() {
     this.router.post('/room', optionalAuth, controllersroom.crearRoom)
     this.router.get('/rooms', optionalAuth, controllersroom.listRoom)
+    this.router.get('/room/:codigo', optionalAuth, controllersroom.obtenerRoom)
     this.router.delete('/room/:codigo', optionalAuth, controllersroom.borrarRoom)
     this.router.put('/room', optionalAuth, controllersroom.modifyRoom)
   }

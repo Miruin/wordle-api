@@ -22,6 +22,7 @@ class Rutasroom {
     routes() {
         this.router.post('/room', optionalAuth, controllersRoom_1.default.crearRoom);
         this.router.get('/rooms', optionalAuth, controllersRoom_1.default.listRoom);
+        this.router.get('/room/:codigo', optionalAuth, controllersRoom_1.default.obtenerRoom);
         this.router.delete('/room/:codigo', optionalAuth, controllersRoom_1.default.borrarRoom);
         this.router.put('/room', optionalAuth, controllersRoom_1.default.modifyRoom);
     }
