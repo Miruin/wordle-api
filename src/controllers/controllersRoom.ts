@@ -121,10 +121,14 @@ class Controllersroom {
     async obtenerRoom(req:Request, res:Response): Promise<any>{
         try {
             let codigo = req.params.codigo
+            console.log(codigo+'  q lo e: '+req.params.codigo);
+            
             let pool = await getcon()
             let room = await pool.request()
             .input('codigo', sql.Int, codigo)
             .query(String(config.q11));
+            console.log(room.recordset);
+            
             if (room.recordset.length != 0) {
                 let rounds, trys, wordLength, timer
                 rounds = room.recordset.length

@@ -23,7 +23,8 @@
     "passport-jwt": "^4.0.0",
     "tarn": "^3.0.2",
     "tedious": "^14.7.0",
-    "twilio": "^3.79.0"
+    "twilio": "^3.79.0",
+    "ws": "^8.8.1"
   },
   "devDependencies": {
     "@types/bcrypt": "^5.0.0",
@@ -34,6 +35,7 @@
     "@types/node": "^18.0.3",
     "@types/passport": "^1.0.9",
     "@types/passport-jwt": "^3.0.6",
+    "@types/ws": "^8.5.3",
     "nodemon": "^2.0.19",
     "typescript": "^4.7.4"
   }
