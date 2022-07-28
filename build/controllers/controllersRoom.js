@@ -144,13 +144,14 @@ class Controllersroom {
                     .input('codigo', mssql_1.default.Int, codigo)
                     .query(String(config_1.default.q11));
                 if (room.recordset.length != 0) {
-                    let rounds, trys, wordLength, timer;
-                    rounds = room.recordset.length;
-                    trys = room.recordset[0].intentos;
-                    wordLength = room.recordset[0].palabra;
-                    timer = room.recordset[0].tiempo_ronda;
+                    const reglas = {
+                        rounds: room.recordset.length,
+                        trys: room.recordset[0].intentos,
+                        wordLength: room.recordset[0].palabra,
+                        timer: room.recordset[0].tiempo_ronda
+                    };
                     pool.close();
-                    return res.status(200).send({ Rounds: rounds, Trys: trys, WordLength: wordLength, Timer: timer });
+                    return res.status(200).send({ Reglas: reglas });
                 }
                 else {
                     pool.close();
