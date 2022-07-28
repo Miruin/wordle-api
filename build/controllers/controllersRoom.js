@@ -139,12 +139,10 @@ class Controllersroom {
         return __awaiter(this, void 0, void 0, function* () {
             try {
                 let codigo = req.params.codigo;
-                console.log(codigo + '  q lo e: ' + req.params.codigo);
                 let pool = yield (0, connection_1.getcon)();
                 let room = yield pool.request()
                     .input('codigo', mssql_1.default.Int, codigo)
                     .query(String(config_1.default.q11));
-                console.log(room.recordset);
                 if (room.recordset.length != 0) {
                     let rounds, trys, wordLength, timer;
                     rounds = room.recordset.length;
