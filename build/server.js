@@ -33,14 +33,26 @@ class Server {
     start() {
         const server = http_1.default.createServer(this.app);
         const wss = new ws_1.default.Server({ server });
-        wss.on("connection", function connection(ws) {
-            ws.on("message", function incoming(message, isBinary) {
-                console.log(message.toString(), isBinary);
-                wss.clients.forEach(function each(client) {
-                    if (client.readyState === ws_1.default.OPEN) {
-                        client.send(message.toString());
-                    }
-                });
+        const clients = new Set();
+        wss.on("connection", (ws) => {
+            clients.add(ws);
+            ws.on('message', (data) => {
+                const packet = JSON.parse(data.toString());
+                switch (packet.type) {
+                    case "conectado":
+                        console.log(packet.user + ' se ha conectado');
+                        clients.forEach((value) => {
+                            console.log(value);
+                        });
+                        ws.send(JSON.stringify({
+                            type: 'conectado',
+                            msg: 'te has conectando'
+                        }));
+                        break;
+                    case "puntos":
+                        console.log(packet.user + ' ha obtenido ' + packet.puntos);
+                        break;
+                }
             });
         });
         this.app.listen(this.app.get('port'), () => {

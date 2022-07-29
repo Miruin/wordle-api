@@ -2,6 +2,8 @@ import { Request, Response} from 'express';
 import sql from 'mssql';
 
 import config from "../config/config";
+import fetch from 'node-fetch'
+
 import { getcon, getdatosuser } from '../database/connection';
 
 
