@@ -3,6 +3,7 @@ import cors from 'cors'
 import passport from 'passport'
 import WebSocket, {WebSocketServer} from "ws"
 import http from 'http'
+import * as sio from 'socket.io'
 
 import middleware from './middleware/auth'
 import config from './config/config';
@@ -28,33 +29,15 @@ class Server {
     routes() {
         this.app.use(rutauser);
         this.app.use(rutaroom);
+        this.app.get('/', (req, res) => {
+            console.log('hola');
+            
+        })
     }
     start() {
         this.app.listen(this.app.get('port'), () => {
             console.log('El servidor esta corriendo en el puerto: ', this.app.get('port'));  
         });
-        const server2 = http.createServer(this.app)
-        console.log(server2);
-        
-        const server = new WebSocketServer({ server: server2});
-        const clients = new Set();
-        server.on("connection", (socket) => {
-            clients.add(socket);
-            socket.on("message", (data) => {
-                const packet = JSON.parse(String(data));
-                switch (packet.type) { 
-                    case "conectado":
-                        socket.send(JSON.stringify({
-                            type: 'conectado',
-                            msg: 'te has conectando'
-                        }));
-                    break;
-                    case"puntos":
-                        console.log(packet.user+' ha obtenido '+packet.puntos);
-                    break
-                }
-              })
-        })
     }
 }
 
