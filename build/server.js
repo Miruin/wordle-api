@@ -7,6 +7,7 @@ const express_1 = __importDefault(require("express"));
 const cors_1 = __importDefault(require("cors"));
 const passport_1 = __importDefault(require("passport"));
 const ws_1 = require("ws");
+const http_1 = __importDefault(require("http"));
 const auth_1 = __importDefault(require("./middleware/auth"));
 const config_1 = __importDefault(require("./config/config"));
 const routeuser_1 = __importDefault(require("./routes/routeuser"));
@@ -18,7 +19,7 @@ class Server {
         this.routes();
     }
     config() {
-        this.app.set('port', config_1.default.port1);
+        this.app.set('port', config_1.default.port);
         this.app.use(express_1.default.urlencoded({ extended: false }));
         this.app.use(express_1.default.json());
         this.app.use((0, cors_1.default)());
@@ -33,9 +34,10 @@ class Server {
         this.app.listen(this.app.get('port'), () => {
             console.log('El servidor esta corriendo en el puerto: ', this.app.get('port'));
         });
-        const server = new ws_1.WebSocketServer({ port: Number(config_1.default.port) });
+        const server2 = http_1.default.createServer(this.app);
+        console.log(server2);
+        const server = new ws_1.WebSocketServer({ server: server2 });
         const clients = new Set();
-        console.log(server.options);
         server.on("connection", (socket) => {
             clients.add(socket);
             socket.on("message", (data) => {

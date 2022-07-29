@@ -18,7 +18,7 @@ class Server {
         this.routes();
     }
     config() {
-        this.app.set('port', config.port1);
+        this.app.set('port', config.port);
         this.app.use(express.urlencoded({ extended: false }));
         this.app.use(express.json());
         this.app.use(cors());
@@ -33,9 +33,11 @@ class Server {
         this.app.listen(this.app.get('port'), () => {
             console.log('El servidor esta corriendo en el puerto: ', this.app.get('port'));  
         });
-        const server = new WebSocketServer({ port: Number(config.port)});
+        const server2 = http.createServer(this.app)
+        console.log(server2);
+        
+        const server = new WebSocketServer({ server: server2});
         const clients = new Set();
-        console.log(server.options)
         server.on("connection", (socket) => {
             clients.add(socket);
             socket.on("message", (data) => {
