@@ -30,52 +30,28 @@ class Server {
         this.app.use(rutaroom);
     }
     start() {
-        const server = http.createServer(this.app)
-        const wss = new WebSocket.Server({ server })
-        const server2 = new WebSocketServer({ port: Number(config.port)});
+        this.app.listen(this.app.get('port'), () => {
+            console.log('El servidor esta corriendo en el puerto: ', this.app.get('port'));  
+        });
+        const server = new WebSocketServer({ port: Number(config.port)});
         const clients = new Set();
-        server2.on("connection", (socket) => {
+        server.on("connection", (socket) => {
             clients.add(socket);
-            clients.forEach((value) => {
-                console.log(value);
-            })
             socket.on("message", (data) => {
                 const packet = JSON.parse(String(data));
                 switch (packet.type) { 
                     case "conectado":
-                        console.log(packet.user+' se ha conectado');
                         socket.send(JSON.stringify({
                             type: 'conectado',
                             msg: 'te has conectando'
-                        }))
+                        }));
                     break;
-                }
-              })
-        })
-        wss.on("connection", (ws) => {
-            clients.add(ws)
-            ws.on('message', (data) => {
-                const packet = JSON.parse(data.toString());
-                switch (packet.type) {
-                    case "conectado":
-                        console.log(packet.user+' se ha conectado');
-                        clients.forEach((value) => {
-                            console.log(value)
-                        })
-                        ws.send(JSON.stringify({
-                            type: 'conectado',
-                            msg: 'te has conectando'
-                        }))
-                    break
                     case"puntos":
                         console.log(packet.user+' ha obtenido '+packet.puntos);
                     break
                 }
-            })
-        });
-        this.app.listen(this.app.get('port'), () => {
-            console.log('El servidor esta corriendo en el puerto: ', this.app.get('port'));  
-        });
+              })
+        })
     }
 }
 
