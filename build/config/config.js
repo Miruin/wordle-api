@@ -3,6 +3,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const dotenv_1 = require("dotenv");
 (0, dotenv_1.config)();
 exports.default = {
+    port1: process.env.PORT1 || 8080,
     port: process.env.PORT || 3000,
     dbuser: process.env.DB_USER || '',
     dbpw: process.env.DB_PW || '',

@@ -1,7 +1,7 @@
 import express from 'express'
 import cors from 'cors'
 import passport from 'passport'
-import WebSocket from "ws"
+import WebSocket, {WebSocketServer} from "ws"
 import http from 'http'
 
 import middleware from './middleware/auth'
@@ -18,7 +18,7 @@ class Server {
         this.routes();
     }
     config() {
-        this.app.set('port', config.port);
+        this.app.set('port', config.port1);
         this.app.use(express.urlencoded({ extended: false }));
         this.app.use(express.json());
         this.app.use(cors());
@@ -32,7 +32,26 @@ class Server {
     start() {
         const server = http.createServer(this.app)
         const wss = new WebSocket.Server({ server })
+        const server2 = new WebSocketServer({ port: Number(config.port)});
         const clients = new Set();
+        server2.on("connection", (socket) => {
+            clients.add(socket);
+            clients.forEach((value) => {
+                console.log(value);
+            })
+            socket.on("message", (data) => {
+                const packet = JSON.parse(String(data));
+                switch (packet.type) { 
+                    case "conectado":
+                        console.log(packet.user+' se ha conectado');
+                        socket.send(JSON.stringify({
+                            type: 'conectado',
+                            msg: 'te has conectando'
+                        }))
+                    break;
+                }
+              })
+        })
         wss.on("connection", (ws) => {
             clients.add(ws)
             ws.on('message', (data) => {

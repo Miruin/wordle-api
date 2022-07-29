@@ -3,6 +3,7 @@ config();
 
 export default{
 
+    port1: process.env.PORT1 || 8080,
     port: process.env.PORT || 3000,
     
     dbuser: process.env.DB_USER || '',
