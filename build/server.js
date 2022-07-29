@@ -35,6 +35,7 @@ class Server {
         });
         const server = new ws_1.WebSocketServer({ port: Number(config_1.default.port) });
         const clients = new Set();
+        console.log(server.options);
         server.on("connection", (socket) => {
             clients.add(socket);
             socket.on("message", (data) => {
