@@ -167,10 +167,12 @@ class Controllersuser {
             const pool = await getcon();
             const result = await getdatosuser(pool, username);
             let {nick_usuario, scoretotal} = result.recordset[0];
+            console.log(result.recordset[0])
             const Usuario = {
                 username: nick_usuario,
                 scoretotal: scoretotal
             }
+            console.log(Usuario)
             pool.close();
             return res.status(200).send({usuario: Usuario});
         } catch (error) {
