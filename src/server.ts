@@ -1,9 +1,6 @@
 import express from 'express'
 import cors from 'cors'
 import passport from 'passport'
-import WebSocket, {WebSocketServer} from "ws"
-import http from 'http'
-import * as sio from 'socket.io'
 
 import middleware from './middleware/auth'
 import config from './config/config';
@@ -29,10 +26,6 @@ class Server {
     routes() {
         this.app.use(rutauser);
         this.app.use(rutaroom);
-        this.app.get('/', (req, res) => {
-            console.log('hola');
-            
-        })
     }
     start() {
         this.app.listen(this.app.get('port'), () => {

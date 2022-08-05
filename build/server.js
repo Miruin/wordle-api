@@ -27,9 +27,6 @@ class Server {
     routes() {
         this.app.use(routeuser_1.default);
         this.app.use(routeroom_1.default);
-        this.app.get('/', (req, res) => {
-            console.log('hola');
-        });
     }
     start() {
         this.app.listen(this.app.get('port'), () => {

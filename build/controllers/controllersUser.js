@@ -192,12 +192,10 @@ class Controllersuser {
                     username = String(req.user);
                 const pool = yield (0, connection_1.getcon)();
                 const result = yield (0, connection_1.getdatosuser)(pool, username);
-                let { nick_usuario, followers_usuario, name_usuario, lastname_usuario } = result.recordset[0];
+                let { nick_usuario, scoretotal } = result.recordset[0];
                 const Usuario = {
                     username: nick_usuario,
-                    nombre: name_usuario,
-                    apellido: lastname_usuario,
-                    followers: followers_usuario
+                    scoretotal: scoretotal
                 };
                 pool.close();
                 return res.status(200).send({ usuario: Usuario });
